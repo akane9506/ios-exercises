@@ -5,13 +5,16 @@
 //  Created by Tingsong Ou on 9/6/25.
 //
 
-import Foundation
+import SwiftUI
+import SwiftData
 
+@Model
 class Book {
     var title: String
     var author: String
     var dateAdded: Date
     var dateStarted: Date
+    var dateCompleted: Date
     var summary: String
     var rating: Int?
     var status: Status
@@ -19,21 +22,35 @@ class Book {
     init(
         title: String,
         author: String,
-        dateAdded: Date,
-        dateStarted: Date,
-        status: Status,
-        summary: String,
+        dateAdded: Date = Date.now,
+        dateStarted: Date = Date.distantPast,
+        dateCompleted: Date = Date.distantPast,
+        summary: String = "",
+        status: Status = .onShelf,
         rating: Int? = nil
     ) {
         self.title = title
         self.author = author
         self.dateAdded = dateAdded
         self.dateStarted = dateStarted
+        self.dateCompleted = dateCompleted
         self.summary = summary
         self.status = status
         self.rating = rating
     }
+    
+    var icon: Image {
+        switch status {
+        case .onShelf:
+            Image(systemName: "checkmark.diamond.fill")
+        case .inProgress:
+            Image(systemName: "book.fill")
+        case .completed:
+            Image(systemName: "books.vertical.fill")
+        }
+    }
 }
+
 
 enum Status: Int, Codable, Identifiable, CaseIterable {
     case onShelf, inProgress, completed
