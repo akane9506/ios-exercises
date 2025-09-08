@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class Book {
+class Book: Equatable {
     var title: String
     var author: String
     var dateAdded: Date
@@ -48,6 +48,17 @@ class Book {
         case .completed:
             Image(systemName: "books.vertical.fill")
         }
+    }
+    
+    static func  ==(lhs: Book, rhs: Book) -> Bool {
+        lhs.title == rhs.title &&
+        lhs.author == rhs.author &&
+        lhs.summary == rhs.summary &&
+        lhs.status == rhs.status &&
+        lhs.rating == rhs.rating &&
+        lhs.dateAdded == rhs.dateAdded &&
+        lhs.dateStarted == rhs.dateStarted &&
+        lhs.dateCompleted == rhs.dateCompleted
     }
 }
 

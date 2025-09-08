@@ -22,9 +22,9 @@ struct BookListView: View {
                     List {
                         ForEach(books) { book in
                             NavigationLink{
-                                Text(book.title)
+                                EditBookView(book: book)
                             } label: {
-                               BookListLabel(book: book)
+                                BookListLabel(book: book)
                             }
                         }
                         .onDelete { indexSet in
