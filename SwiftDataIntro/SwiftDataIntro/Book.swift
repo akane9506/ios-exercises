@@ -18,7 +18,7 @@ class Book: Equatable {
     var summary: String
     var rating: Int?
     var status: Status
-    
+
     init(
         title: String,
         author: String,
@@ -26,8 +26,8 @@ class Book: Equatable {
         dateStarted: Date = Date.distantPast,
         dateCompleted: Date = Date.distantPast,
         summary: String = "",
-        status: Status = .onShelf,
-        rating: Int? = nil
+        rating: Int? = nil,
+        status: Status = .onShelf
     ) {
         self.title = title
         self.author = author
@@ -35,8 +35,8 @@ class Book: Equatable {
         self.dateStarted = dateStarted
         self.dateCompleted = dateCompleted
         self.summary = summary
-        self.status = status
         self.rating = rating
+        self.status = status
     }
     
     var icon: Image {

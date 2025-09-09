@@ -34,7 +34,6 @@ struct BookListView: View {
                             }
                         }
                     }
-                    
                 }
             }
             .toolbar {
@@ -57,6 +56,8 @@ struct BookListView: View {
 }
 
 #Preview {
-    BookListView()
-        .modelContainer(for: Book.self, inMemory: true)
+    let preview = Preview(Book.self)
+    preview.addExample(Book.sampleBooks)
+    return BookListView()
+        .modelContainer(preview.container)
 }

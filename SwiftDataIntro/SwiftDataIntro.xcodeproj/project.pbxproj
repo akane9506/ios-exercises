@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		E73FE3D52E6D5A9A00C04B30 /* SwiftDataIntro */ = {
+		E7A374AF2E6FED01005250C1 /* SwiftDataIntro */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SwiftDataIntro;
 			sourceTree = "<group>";
@@ -32,7 +32,7 @@
 		E73FE3CA2E6D5A9A00C04B30 = {
 			isa = PBXGroup;
 			children = (
-				E73FE3D52E6D5A9A00C04B30 /* SwiftDataIntro */,
+				E7A374AF2E6FED01005250C1 /* SwiftDataIntro */,
 				E73FE3D42E6D5A9A00C04B30 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				E73FE3D52E6D5A9A00C04B30 /* SwiftDataIntro */,
+				E7A374AF2E6FED01005250C1 /* SwiftDataIntro */,
 			);
 			name = SwiftDataIntro;
 			packageProductDependencies = (
