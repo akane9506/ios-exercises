@@ -27,13 +27,5 @@ struct SwiftDataIntroApp: App {
             fatalError("Could not configure the container")
         }
         print(URL.applicationSupportDirectory.path(percentEncoded: false))
-        //        let config = ModelConfiguration(url: URL.documentsDirectory.appending(path: "MyBooks.store"))
-//        do {
-//            container = try ModelContainer(for: Book.self, configurations: config)
-//        } catch {
-//            fatalError()
-//        }
-//        print(URL.documentsDirectory.path())
-        
     }
 }

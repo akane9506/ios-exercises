@@ -17,7 +17,7 @@ class Book: Equatable {
     var dateCompleted: Date
     var summary: String
     var rating: Int?
-    var status: Status
+    var status: Status.RawValue
 
     init(
         title: String,
@@ -36,11 +36,11 @@ class Book: Equatable {
         self.dateCompleted = dateCompleted
         self.summary = summary
         self.rating = rating
-        self.status = status
+        self.status = status.rawValue
     }
     
     var icon: Image {
-        switch status {
+        switch Status(rawValue: status)! {
         case .onShelf:
             Image(systemName: "checkmark.diamond.fill")
         case .inProgress:
@@ -48,17 +48,6 @@ class Book: Equatable {
         case .completed:
             Image(systemName: "books.vertical.fill")
         }
-    }
-    
-    static func  ==(lhs: Book, rhs: Book) -> Bool {
-        lhs.title == rhs.title &&
-        lhs.author == rhs.author &&
-        lhs.summary == rhs.summary &&
-        lhs.status == rhs.status &&
-        lhs.rating == rhs.rating &&
-        lhs.dateAdded == rhs.dateAdded &&
-        lhs.dateStarted == rhs.dateStarted &&
-        lhs.dateCompleted == rhs.dateCompleted
     }
 }
 

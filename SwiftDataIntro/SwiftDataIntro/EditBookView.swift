@@ -8,12 +8,23 @@
 import SwiftUI
 
 struct EditBookView: View {
+    @Environment(\.dismiss) private var dismiss
     let book: Book
-    @State private var tempBook = Book(title: "", author: "", summary: "", status: Status.onShelf)
+    @State private var title = ""
+    @State private var author = ""
+    @State private var summary = ""
+    @State private var status = Status.onShelf
+    @State private var rating:Int?
+    @State private var dateAdded = Date.distantPast
+    @State private var dateStarted = Date.distantPast
+    @State private var dateCompleted = Date.distantPast
+    @State private var firstView = true
+    @State private var loading = true
+    
     var body: some View {
         HStack {
             Text("Status")
-            Picker("Status", selection: $tempBook.status) {
+            Picker("Status", selection: $status) {
                 ForEach(Status.allCases) { status in
                     Text(status.descr).tag(status)
                 }
@@ -23,42 +34,64 @@ struct EditBookView: View {
         VStack(alignment: .leading) {
             GroupBox {
                 LabeledContent {
-                    DatePicker("", selection: $tempBook.dateAdded, displayedComponents: .date)
+                    DatePicker("", selection: $dateAdded, displayedComponents: .date)
                 } label : {
                     Text("Date Added")
                 }
-                if tempBook.status == .completed || tempBook.status == .inProgress {
+                if status == .completed || status == .inProgress {
                     LabeledContent {
-                        DatePicker("", selection: $tempBook.dateStarted, in: tempBook.dateAdded..., displayedComponents: .date)
+                        DatePicker("", selection: $dateStarted, in: dateAdded..., displayedComponents: .date)
                     } label : {
                         Text("Date Started")
                     }
                 }
-                if tempBook.status == .completed {
+                if status == .completed {
                     LabeledContent {
-                        DatePicker("", selection: $tempBook.dateCompleted, in: tempBook.dateStarted..., displayedComponents: .date)
+                        DatePicker("", selection: $dateCompleted, in: dateStarted..., displayedComponents: .date)
                     } label : {
                         Text("Date Completed")
                     }
                 }
             }
             .foregroundStyle(.secondary)
+            .onChange(of: status) { oldValue, newValue in
+                 if !firstView {
+                     if newValue == .onShelf {
+                         dateStarted = Date.distantPast
+                         dateCompleted = Date.distantPast
+                     } else if newValue == .inProgress && oldValue == .completed {
+                         // from completed to inProgress
+                         dateCompleted = Date.distantPast
+                     } else if newValue == .inProgress && oldValue == .onShelf {
+                         // Book has been started
+                         dateStarted = Date.now
+                     } else if newValue == .completed && oldValue == .onShelf {
+                         // Forgot to start book
+                         dateCompleted = Date.now
+                         dateStarted = dateAdded
+                     } else {
+                         // completed
+                         dateCompleted = Date.now
+                     }
+                     firstView = false
+                 }
+             }
             
             Divider()
             LabeledContent {
-                TextField("", text:$tempBook.title)
+                TextField("", text:$title)
             } label: {
                 Text("Title").foregroundStyle(.secondary)
             }
             
             LabeledContent {
-                TextField("", text:$tempBook.author)
+                TextField("", text:$author)
             } label: {
                 Text("Author").foregroundStyle(.secondary)
             }
             
             LabeledContent {
-                RatingsView(maxRating: 5, currRating: $tempBook.rating, width: 25)
+                RatingsView(maxRating: 5, currRating: $rating, width: 25)
             } label: {
                 Text("Rating").foregroundStyle(.secondary)
             }
@@ -66,7 +99,7 @@ struct EditBookView: View {
             Divider()
             
             Text("Summary").foregroundStyle(.secondary)
-            TextEditor(text: $tempBook.summary)
+            TextEditor(text: $summary)
                 .padding(
                     5
                 )
@@ -80,39 +113,46 @@ struct EditBookView: View {
         }
         .padding()
         .textFieldStyle(.roundedBorder)
-        .navigationTitle(tempBook.title)
+        .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            if changed {
+            if changed && !loading {
                 Button("Update") {
-                    book.status = tempBook.status
-                    book.rating = tempBook.rating
-                    book.title = tempBook.title
-                    book.author = tempBook.author
-                    book.summary = tempBook.summary
-                    book.dateAdded = tempBook.dateAdded
-                    book.dateStarted = tempBook.dateStarted
-                    book.dateCompleted = tempBook.dateCompleted
+                    book.status = status.rawValue
+                    book.rating = rating
+                    book.title = title
+                    book.author = author
+                    book.summary = summary
+                    book.dateAdded = dateAdded
+                    book.dateStarted = dateStarted
+                    book.dateCompleted = dateCompleted
                 }
                 .buttonStyle(.borderedProminent)
             }
         }
         .onAppear {
-            tempBook.status = book.status
-            tempBook.rating = book.rating
-            tempBook.title = book.title
-            tempBook.author = book.author
-            tempBook.summary = book.summary
-            tempBook.dateAdded = book.dateAdded
-            tempBook.dateStarted = book.dateStarted
-            tempBook.dateCompleted = book.dateCompleted
+            status = Status(rawValue: book.status)!
+            rating = book.rating
+            title = book.title
+            author = book.author
+            summary = book.summary
+            dateAdded = book.dateAdded
+            dateStarted = book.dateStarted
+            dateCompleted = book.dateCompleted
+            loading = false
         }
     }
     
     var changed: Bool {
-        tempBook != book
+        status != Status(rawValue: book.status)! ||
+        rating != book.rating ||
+        title != book.title ||
+        author != book.author ||
+        summary != book.summary ||
+        dateAdded != book.dateAdded ||
+        dateStarted != book.dateStarted ||
+        dateCompleted != book.dateCompleted 
     }
-    
 }
 
 #Preview {

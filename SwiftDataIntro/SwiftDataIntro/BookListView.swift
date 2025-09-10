@@ -8,49 +8,44 @@
 import SwiftUI
 import SwiftData
 
+enum SortOrder: String, Identifiable, CaseIterable {
+    case status, title, author
+    var id: Self {
+        self
+    }
+}
+
 struct BookListView: View {
-    @Environment(\.modelContext) private var context
-    @Query(sort: \Book.title) private var books: [Book]
-    @State private var createNewBook: Bool = false;
+    //    @Environment(\.modelContext) private var context
+    //    @Query(sort: \Book.title) private var books: [Book]
+    @State private var createNewBook: Bool = false
+    @State private var sortOrder: SortOrder = .title
+    @State private var filterString: String = ""
     var body: some View {
         NavigationStack {
-            Group{
-                if books.isEmpty {
-                    ContentUnavailableView("Enter your first book.", systemImage: "book.fill")
+            Picker("", selection: $sortOrder) {
+                ForEach(SortOrder.allCases) { sortOrder in
+                    Text("Sort by \(sortOrder.rawValue)").tag(sortOrder)
                 }
-                else {
-                    List {
-                        ForEach(books) { book in
-                            NavigationLink{
-                                EditBookView(book: book)
-                            } label: {
-                                BookListLabel(book: book)
-                            }
-                        }
-                        .onDelete { indexSet in
-                            indexSet.forEach { index in
-                                let book = books[index]
-                                context.delete(book)
-                            }
-                        }
+            }
+            .buttonStyle(.bordered)
+            BookList(sortOrder: sortOrder, filterString: filterString)
+                .searchable(text: $filterString, prompt: "Filter on title or author")
+                .toolbar {
+                    Button {
+                        // action
+                        createNewBook = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .imageScale(.large)
                     }
                 }
-            }
-            .toolbar {
-                Button {
-                    // action
-                    createNewBook = true
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .imageScale(.large)
-                }
-            }
-            .navigationTitle("My Books")
+                .navigationTitle("My Books")
             
-            .sheet(isPresented: $createNewBook) {
-                NewBookView()
-                    .presentationDetents([.medium])
-            }
+                .sheet(isPresented: $createNewBook) {
+                    NewBookView()
+                        .presentationDetents([.medium])
+                }
         }
     }
 }
