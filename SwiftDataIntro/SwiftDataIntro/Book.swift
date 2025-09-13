@@ -19,7 +19,7 @@ class Book {
     var synopsis: String
     var rating: Int?
     var status: Status.RawValue
-    var recommendedBy: String
+    var recommendedBy: String = ""
     @Relationship(deleteRule: .cascade)
     var quotes: [Quote]?
 
