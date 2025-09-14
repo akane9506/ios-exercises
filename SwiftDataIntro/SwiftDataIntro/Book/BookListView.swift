@@ -16,8 +16,6 @@ enum SortOrder: String, Identifiable, CaseIterable {
 }
 
 struct BookListView: View {
-    //    @Environment(\.modelContext) private var context
-    //    @Query(sort: \Book.title) private var books: [Book]
     @State private var createNewBook: Bool = false
     @State private var sortOrder: SortOrder = .title
     @State private var filterString: String = ""
@@ -53,6 +51,7 @@ struct BookListView: View {
 #Preview {
     let preview = Preview(Book.self)
     preview.addExample(Book.sampleBooks)
+    preview.addExample(Genre.sampleGenres)
     return BookListView()
         .modelContainer(preview.container)
 }
