@@ -20,6 +20,7 @@ struct NewGenreView: View {
                 Button("Create") {
                     let newGenre = Genre(name: name, color: color.toHexString()!)
                     context.insert(newGenre)
+                    dismiss()
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity, alignment: .trailing)

@@ -21,6 +21,7 @@ struct EditBookView: View {
     @State private var dateCompleted = Date.distantPast
     @State private var firstView = true
     @State private var loading = true
+    @State private var showGenres = false
     
     var body: some View {
         HStack {
@@ -56,27 +57,27 @@ struct EditBookView: View {
             }
             .foregroundStyle(.secondary)
             .onChange(of: status) { oldValue, newValue in
-                 if !firstView {
-                     if newValue == .onShelf {
-                         dateStarted = Date.distantPast
-                         dateCompleted = Date.distantPast
-                     } else if newValue == .inProgress && oldValue == .completed {
-                         // from completed to inProgress
-                         dateCompleted = Date.distantPast
-                     } else if newValue == .inProgress && oldValue == .onShelf {
-                         // Book has been started
-                         dateStarted = Date.now
-                     } else if newValue == .completed && oldValue == .onShelf {
-                         // Forgot to start book
-                         dateCompleted = Date.now
-                         dateStarted = dateAdded
-                     } else {
-                         // completed
-                         dateCompleted = Date.now
-                     }
-                     firstView = false
-                 }
-             }
+                if !firstView {
+                    if newValue == .onShelf {
+                        dateStarted = Date.distantPast
+                        dateCompleted = Date.distantPast
+                    } else if newValue == .inProgress && oldValue == .completed {
+                        // from completed to inProgress
+                        dateCompleted = Date.distantPast
+                    } else if newValue == .inProgress && oldValue == .onShelf {
+                        // Book has been started
+                        dateStarted = Date.now
+                    } else if newValue == .completed && oldValue == .onShelf {
+                        // Forgot to start book
+                        dateCompleted = Date.now
+                        dateStarted = dateAdded
+                    } else {
+                        // completed
+                        dateCompleted = Date.now
+                    }
+                    firstView = false
+                }
+            }
             
             Divider()
             LabeledContent {
@@ -113,18 +114,36 @@ struct EditBookView: View {
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(
                             Color.secondary.opacity(0.3),
-                        lineWidth: 1
-                    )
+                            lineWidth: 1
+                        )
                 )
-            NavigationLink{
-                QuoteListView(book: book)
-            } label: {
-                let count = book.quotes?.count ?? 0
-                Label("^[\(count) Quotes](inflect: true)", systemImage: "quote.opening")
+            if let genres = book.genres {
+                ViewThatFits {
+                    GenreStackView(genres:genres)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        GenreStackView(genres: genres)
+                    }
+                }
+            }
+            HStack {
+                Button("Genre") {
+                    showGenres.toggle()
+                }
+                .sheet(isPresented: $showGenres) {
+                    GenresView(book: book)
+                }
+                NavigationLink{
+                    QuoteListView(book: book)
+                } label: {
+                    let count = book.quotes?.count ?? 0
+                    Label("^[\(count) Quotes](inflect: true)", systemImage: "quote.opening")
+                }
+                
             }
             .buttonStyle(.bordered)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.horizontal)
+            .padding(.top, 10)
         }
         .padding()
         .textFieldStyle(.roundedBorder)
@@ -175,8 +194,12 @@ struct EditBookView: View {
 
 #Preview {
     let preview = Preview(Book.self)
+    let genres = Genre.sampleGenres
+    let book = Book.sampleBooks[4]
+    book.genres = []
+    preview.addExample(genres)
     return NavigationStack {
-        EditBookView(book: Book.sampleBooks[4])
+        EditBookView(book: book)
             .modelContainer(preview.container)
     }
 }
