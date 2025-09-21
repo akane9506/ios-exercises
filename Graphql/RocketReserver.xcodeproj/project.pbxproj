@@ -28,6 +28,7 @@
 		E79FF37A2E77D66F00E3468B /* RocketReserverAPI in Frameworks */ = {isa = PBXBuildFile; productRef = E79FF3792E77D66F00E3468B /* RocketReserverAPI */; };
 		E79FF37C2E77D7E700E3468B /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79FF37B2E77D7E700E3468B /* Network.swift */; };
 		E79FF37E2E77DB6300E3468B /* RocketReserverAPI in Frameworks */ = {isa = PBXBuildFile; productRef = E79FF37D2E77DB6300E3468B /* RocketReserverAPI */; };
+		E7AA16132E80BF0000D9A333 /* launchDetails.graphql in Resources */ = {isa = PBXBuildFile; fileRef = E7AA16122E80BEF000D9A333 /* launchDetails.graphql */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		66F96FE929FC183200713B80 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		E79FF3762E77D2BB00E3468B /* launchList.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = launchList.graphql; sourceTree = "<group>"; };
 		E79FF37B2E77D7E700E3468B /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		E7AA16122E80BEF000D9A333 /* launchDetails.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = launchDetails.graphql; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 		66EEA77E2A13C94400BB8C72 /* graphql */ = {
 			isa = PBXGroup;
 			children = (
+				E7AA16122E80BEF000D9A333 /* launchDetails.graphql */,
 				66EEA77F2A13C9AD00BB8C72 /* schema.graphqls */,
 				E79FF3762E77D2BB00E3468B /* launchList.graphql */,
 			);
@@ -201,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66F96FA229FAC0D700713B80 /* Preview Assets.xcassets in Resources */,
+				E7AA16132E80BF0000D9A333 /* launchDetails.graphql in Resources */,
 				66EEA7802A13C9AD00BB8C72 /* schema.graphqls in Resources */,
 				E79FF3772E77D2BB00E3468B /* launchList.graphql in Resources */,
 				66F96F9F29FAC0D700713B80 /* Assets.xcassets in Resources */,

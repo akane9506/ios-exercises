@@ -1,0 +1,16 @@
+query LaunchDetails($launchID: ID!) {
+  launch(id: $launchID) {
+    id
+    site
+    mission {
+      name
+      missionPatch(size: LARGE)
+    }
+    rocket {
+      id
+      name
+      type
+    }
+    isBooked
+  }
+}

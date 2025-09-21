@@ -7,10 +7,16 @@ public class LaunchListQuery: GraphQLQuery {
   public static let operationName: String = "LaunchList"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query LaunchList { launches { __typename cursor hasMore launches { __typename id site } } }"#
+      #"query LaunchList($cursor: String) { launches(after: $cursor) { __typename cursor hasMore launches { __typename id site mission { __typename name missionPatch(size: SMALL) } } } }"#
     ))
 
-  public init() {}
+  public var cursor: GraphQLNullable<String>
+
+  public init(cursor: GraphQLNullable<String>) {
+    self.cursor = cursor
+  }
+
+  public var __variables: Variables? { ["cursor": cursor] }
 
   public struct Data: RocketReserverAPI.SelectionSet {
     public let __data: DataDict
@@ -18,7 +24,7 @@ public class LaunchListQuery: GraphQLQuery {
 
     public static var __parentType: any ApolloAPI.ParentType { RocketReserverAPI.Objects.Query }
     public static var __selections: [ApolloAPI.Selection] { [
-      .field("launches", Launches.self),
+      .field("launches", Launches.self, arguments: ["after": .variable("cursor")]),
     ] }
 
     public var launches: Launches { __data["launches"] }
@@ -54,10 +60,30 @@ public class LaunchListQuery: GraphQLQuery {
           .field("__typename", String.self),
           .field("id", RocketReserverAPI.ID.self),
           .field("site", String?.self),
+          .field("mission", Mission?.self),
         ] }
 
         public var id: RocketReserverAPI.ID { __data["id"] }
         public var site: String? { __data["site"] }
+        public var mission: Mission? { __data["mission"] }
+
+        /// Launches.Launch.Mission
+        ///
+        /// Parent Type: `Mission`
+        public struct Mission: RocketReserverAPI.SelectionSet {
+          public let __data: DataDict
+          public init(_dataDict: DataDict) { __data = _dataDict }
+
+          public static var __parentType: any ApolloAPI.ParentType { RocketReserverAPI.Objects.Mission }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .field("name", String?.self),
+            .field("missionPatch", String?.self, arguments: ["size": "SMALL"]),
+          ] }
+
+          public var name: String? { __data["name"] }
+          public var missionPatch: String? { __data["missionPatch"] }
+        }
       }
     }
   }
